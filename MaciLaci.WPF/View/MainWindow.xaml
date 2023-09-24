@@ -1,0 +1,101 @@
+﻿<Window x:Class="MaciLaci.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MaciLaci.WPF"
+        mc:Ignorable="d"
+        Title="Maci Laci játék" Height="700" Width="700" ResizeMode="NoResize">
+    <Window.InputBindings>
+        <KeyBinding Key="W" Command="{Binding StepPlayerCommand}" CommandParameter="W" />
+        <KeyBinding Key="A" Command="{Binding StepPlayerCommand}" CommandParameter="A"/>
+        <KeyBinding Key="S" Command="{Binding StepPlayerCommand}" CommandParameter="S"/>
+        <KeyBinding Key="D" Command="{Binding StepPlayerCommand}" CommandParameter="D"/>
+    </Window.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="Fájl">
+                <MenuItem Header="Új játék" Command="{Binding NewGameCommand}" />
+                <Separator />
+                <MenuItem Header="Betöltés..." Command="{Binding LoadGameCommand}" />
+                <MenuItem Header="Mentés..." Command="{Binding SaveGameCommand}" />
+                <Separator />
+                <MenuItem Header="Szüneteltetés..." Command="{Binding PauseGameCommand}">
+                </MenuItem>
+                <MenuItem Header="Folytatás..." Command="{Binding ContinueGameCommand}">
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Kilépés" Command="{Binding ExitCommand}" />
+            </MenuItem>
+            <MenuItem Header="Beállítások">
+                <MenuItem Header="Könnyű pálya" IsCheckable="True" IsChecked="{Binding IsTableSmall}" />
+                <MenuItem Header="Közepes pálya" IsCheckable="True" IsChecked="{Binding IsTableMedium}" />
+                <MenuItem Header="Nehéz pálya" IsCheckable="True" IsChecked="{Binding IsTableLarge}" />
+            </MenuItem>
+        </Menu>
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding GameField}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding TableSizeInt}" Columns="{Binding TableSizeInt}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="Black">
+                        <TextBlock Text="{Binding Text}" Focusable="False" FontSize="35" 
+                                   Height="50"
+                                   Width="50"
+                                   HorizontalAlignment="Center"
+                                   FontWeight="Bold" 
+                                   Background="White"
+                                   TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text}" Value="🚔">
+                                            <Setter Property="Foreground" Value="Blue" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Text}" Value="🧺">
+                                            <Setter Property="Foreground" Value="Orange" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Text}" Value="🌳">
+                                            <Setter Property="Foreground" Value="Green" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Text}" Value="🐻">
+                                            <Setter Property="Foreground" Value="Brown" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Text="Begyűjtött kosarak: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding GameBasketCollected}" />
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock Text="Játékidő: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding GameTime}" />
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem />
+        </StatusBar>
+
+
+    </Grid>
+</Window>
